@@ -1,0 +1,67 @@
+[gd_scene load_steps=9 format=3 uid="uid://c0w1qgy41uwo6"]
+
+[ext_resource type="Script" path="res://AppleTree.gd" id="1_boi10"]
+[ext_resource type="Resource" uid="uid://c2yqehf3oea60" path="res://inventory/items/apple.tres" id="2_pwlq8"]
+[ext_resource type="Texture2D" uid="uid://2w55vwenqm1t" path="res://resources/enviroment/survivalgame-appletree.png" id="2_vif4m"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sxqef"]
+atlas = ExtResource("2_vif4m")
+region = Rect2(40, 0, 40, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cpcqf"]
+atlas = ExtResource("2_vif4m")
+region = Rect2(80, 0, 40, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ycgyv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sxqef")
+}],
+"loop": true,
+"name": &"apples",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cpcqf")
+}],
+"loop": true,
+"name": &"no_apples",
+"speed": 0.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fx81j"]
+radius = 32.1403
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jfn6w"]
+radius = 6.0
+
+[node name="AppleTree" type="Node2D"]
+script = ExtResource("1_boi10")
+item = ExtResource("2_pwlq8")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ycgyv")
+animation = &"no_apples"
+
+[node name="PickableArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickableArea"]
+shape = SubResource("CircleShape2D_fx81j")
+
+[node name="GrowthTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="Marker2D" type="Marker2D" parent="."]
+
+[node name="Collision" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Collision"]
+position = Vector2(1, 10)
+shape = SubResource("CircleShape2D_jfn6w")
+
+[connection signal="body_entered" from="PickableArea" to="." method="_on_pickable_area_body_entered"]
+[connection signal="body_exited" from="PickableArea" to="." method="_on_pickable_area_body_exited"]
+[connection signal="timeout" from="GrowthTimer" to="." method="_on_growth_timer_timeout"]
