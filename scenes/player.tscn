@@ -347,8 +347,17 @@ limit_bottom = 360
 
 [node name="InvUI" parent="." instance=ExtResource("4_tg47c")]
 offset_left = -42.0
-offset_top = -103.0
+offset_top = -95.0
 offset_right = 44.0
-offset_bottom = -39.0
+offset_bottom = -31.0
 
 [node name="Marker2D" type="Marker2D" parent="."]
+
+[node name="RoundTimeoutLabel" type="Label" parent="."]
+unique_name_in_owner = true
+offset_left = -19.0
+offset_top = -129.0
+offset_right = 21.0
+offset_bottom = -106.0
+text = "99"
+horizontal_alignment = 1

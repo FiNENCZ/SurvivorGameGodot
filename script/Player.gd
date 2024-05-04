@@ -11,9 +11,11 @@ var bow_cooldown = true
 var arrow = preload("res://scenes/arrow.tscn")
 var mouse_location = null
 
+func _ready():
+	$RoundTimeoutLabel.visible = false
+
 func _physics_process(delta):
 	mouse_location = get_global_mouse_position() - self.position
-	
 	var direction = Input.get_vector("left", "right", "up", "down")
 	
 	if direction.x == 0 and direction.y == 0:

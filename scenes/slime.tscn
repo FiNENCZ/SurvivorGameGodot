@@ -154,7 +154,7 @@ radius = 5.0
 radius = 7.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_u7gbk"]
-radius = 173.0
+radius = 2270.77
 
 [node name="Slime" type="CharacterBody2D"]
 script = ExtResource("1_ormhe")
