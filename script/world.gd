@@ -11,6 +11,9 @@ var are_emenies_dead = false
 
 func _ready():
 	$RoundTimer.start()
+	%SkillMenu.increaseAttackSpeed.connect(onIncreseAttackSpeed)
+	%SkillMenu.increaseMovementSpeed.connect(onIncreaseMovementSpeed)
+	%SkillMenu.increaseAttackDamage.connect(onIncreaseAttackDamage)
 
 func _process(delta):
 	# Aktualizace textu labelu na základě zbývajícího času časovače
@@ -39,6 +42,7 @@ func spawn_enemies(amount):
 		slime_instance.position = spawn_position
 		
 		add_child(slime_instance)
+	
 
 func find_valid_spawn_position(player_position, max_distance, min_distance):
 	var spawn_position = Vector2.ZERO
@@ -50,6 +54,7 @@ func find_valid_spawn_position(player_position, max_distance, min_distance):
 
 
 func _on_round_timer_timeout():
+	#$CanvasLayer2/SkillMenu.pause()
 	are_emenies_dead = false
 	$Player.get_node("RoundTimeoutLabel").visible = false
 	$Player.get_node("RoundTimeoutLabel").text = "0"
@@ -61,3 +66,38 @@ func on_enemy_killed():
 	if current_wave_enemies <= 0:
 		are_emenies_dead = true
 		$RoundTimer.start()
+		
+func onIncreseAttackSpeed(value):
+	$Player.attack_speed /= value
+	
+func onIncreaseAttackDamage(value):
+	$Player.attack_damage *= value
+
+func onIncreaseMovementSpeed(value):
+	$Player.default_movement_speed *= value
+	
+func onAddLifeSteal(value):
+	pass
+	
+func onAddArrow():
+	pass
+	
+func onIncreaseMaxHealth(value):
+	pass
+	
+func onSetFrozenArrows():
+	pass
+	
+func onSetFireArrows():
+	pass
+	
+func onSetKnockArrow():
+	pass
+	
+func onIncreaseDamageResistance(value):
+	pass
+	
+	
+	
+
+	

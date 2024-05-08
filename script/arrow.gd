@@ -1,6 +1,9 @@
 extends Area2D
 
+signal player_deal_damage(damage)
+
 var travelled_distance = 0
+var damage
 
 func _ready():
 	set_as_top_level(true)
@@ -23,3 +26,8 @@ func _on_visible_on_screen_enabler_2d_screen_exited():
 	
 func arrow_deal_damage():
 	pass
+
+func _on_body_entered(body):
+	if body.has_method("enemy"):
+		queue_free()
+		body.take_damage(damage)

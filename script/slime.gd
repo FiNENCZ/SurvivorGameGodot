@@ -2,6 +2,9 @@ extends CharacterBody2D
 
 var speed = 40
 var health = 100
+var attack_damage = 50
+
+var player_damage = 50
 
 var dead = false
 var player_in_area = false
@@ -38,13 +41,6 @@ func _on_detection_area_body_exited(body):
 	if body.has_method("player"):
 		player_in_area = false
 
-
-func _on_hit_box_area_entered(area):
-	var damage
-	if area.has_method("arrow_deal_damage"):
-		area.queue_free()
-		damage = 50
-		take_damage(damage)
 		
 func take_damage(damage):
 	health = health - damage
@@ -58,4 +54,7 @@ func death():
 	$AnimatedSprite2D.play("death")
 	await get_tree().create_timer(1).timeout
 	queue_free()
+	
+func enemy():
+	pass
 	

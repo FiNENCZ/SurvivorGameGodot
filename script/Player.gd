@@ -1,7 +1,19 @@
 extends CharacterBody2D
 
-var default_speed = 100
-var current_speed = 100
+signal health_depleted
+
+var default_movement_speed = 100
+var current_movement_speed = 100
+var attack_speed = 0.5
+var attack_damage = 50
+var health = 300
+
+var life_steal = 0
+var damage_resistance = 1
+var arrow_type = 'normal'
+var arrow_number = 1
+
+
 var player_state
 
 @export var inv: Inv
@@ -23,7 +35,7 @@ func _physics_process(delta):
 	elif direction.x != 0 or direction.y != 0:
 		player_state = "walking"
 		
-	velocity = direction * current_speed
+	velocity = direction * current_movement_speed
 	move_and_slide()
 	
 	if Input.is_action_just_pressed("e"):
@@ -36,21 +48,35 @@ func _physics_process(delta):
 	$Marker2D.look_at(mouse_pos)
 	
 	if Input.is_action_pressed("left_mouse") and bow_equiped and bow_cooldown:
-		bow_cooldown = false
-		var arrow_instance = arrow.instantiate()
-		arrow_instance.rotation = $Marker2D.rotation
-		arrow_instance.global_position = $Marker2D.global_position
-		add_child(arrow_instance)
-		
-		await get_tree().create_timer(0.5).timeout
-		bow_cooldown = true
-		
+		shootArrow()
 	
+	detectEnemyDamage(delta)
 	play_anim(direction)
+	
+func detectEnemyDamage(delta):
+	var overlapping_mobs = %HurtBox.get_overlapping_bodies()
+	if overlapping_mobs.size() > 0:
+		for mob in overlapping_mobs:
+			if mob.has_method("enemy"):
+				health -= mob.attack_damage * delta
+				print(health)
+				if health <= 0.0:
+					health_depleted.emit()
+	
+func shootArrow():
+	bow_cooldown = false
+	var arrow_instance = arrow.instantiate()
+	arrow_instance.damage = attack_damage
+	arrow_instance.rotation = $Marker2D.rotation
+	arrow_instance.global_position = $Marker2D.global_position
+	add_child(arrow_instance)
+	
+	await get_tree().create_timer(attack_speed).timeout
+	bow_cooldown = true
 	
 func play_anim(dir):
 	if !bow_equiped:
-		current_speed = default_speed
+		current_movement_speed = default_movement_speed
 		if player_state == "idle":
 			$AnimatedSprite2D.play("idle")
 		if player_state == "walking" :
@@ -72,7 +98,7 @@ func play_anim(dir):
 			if dir.x < -0.5 and dir.y < -0.5:
 				$AnimatedSprite2D.play("nw-walk")
 	if bow_equiped:
-		current_speed = default_speed * 0.5
+		current_movement_speed = default_movement_speed * 0.5
 		
 		if mouse_location.x >= -35 and mouse_location.x <= 35 and mouse_location.y < 0:
 			$AnimatedSprite2D.play("n-attack")
