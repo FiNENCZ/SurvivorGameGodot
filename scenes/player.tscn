@@ -1,9 +1,18 @@
-[gd_scene load_steps=42 format=3 uid="uid://bpefvxdactbjx"]
+[gd_scene load_steps=44 format=3 uid="uid://bpefvxdactbjx"]
 
 [ext_resource type="Script" path="res://script/Player.gd" id="1_rvgma"]
 [ext_resource type="Texture2D" uid="uid://bxq52tohxhoso" path="res://resources/character/survivalgame-player-green.png" id="2_27ryh"]
 [ext_resource type="Resource" uid="uid://bfineso4td4r8" path="res://inventory/player_inv.tres" id="2_gemm0"]
+[ext_resource type="Shader" path="res://scenes/damage_shader.gdshader" id="3_h7nyx"]
 [ext_resource type="PackedScene" uid="uid://sxc6bjqnu603" path="res://scenes/inv_ui.tscn" id="4_tg47c"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3kaxh"]
+shader = ExtResource("3_h7nyx")
+shader_parameter/opacity = 1.0
+shader_parameter/r = 0.0
+shader_parameter/g = null
+shader_parameter/b = null
+shader_parameter/mix_color = 0.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_suvpv"]
 atlas = ExtResource("2_27ryh")
@@ -348,6 +357,7 @@ inv = ExtResource("2_gemm0")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 y_sort_enabled = true
+material = SubResource("ShaderMaterial_3kaxh")
 sprite_frames = SubResource("SpriteFrames_qaopv")
 animation = &"e-attack"
 
@@ -406,3 +416,8 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_x1bf8")
 max_value = 300.0
 value = 300.0
 show_percentage = false
+
+[node name="TakeDamageTimer" type="Timer" parent="."]
+wait_time = 0.1
+
+[connection signal="timeout" from="TakeDamageTimer" to="." method="_on_take_damage_timer_timeout"]

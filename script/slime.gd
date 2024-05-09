@@ -44,6 +44,7 @@ func _on_detection_area_body_exited(body):
 		
 func take_damage(damage):
 	health = health - damage
+	takeDamageAnimation()
 	if health <= 0 and !dead:
 		death()
 		
@@ -55,6 +56,24 @@ func death():
 	await get_tree().create_timer(1).timeout
 	queue_free()
 	
+func takeDamageAnimation():
+	$AnimatedSprite2D.material.set_shader_parameter("opacity", 0.7);
+	$AnimatedSprite2D.material.set_shader_parameter("r", 1.0);
+	$AnimatedSprite2D.material.set_shader_parameter("g", 0);
+	$AnimatedSprite2D.material.set_shader_parameter("b", 0);
+	$AnimatedSprite2D.material.set_shader_parameter("mix_color", 0.7);
+	$TakeDamageTimer.start()
+	
+
+func resetShader():
+	$AnimatedSprite2D.material.set_shader_parameter("opacity", 1.0);
+	$AnimatedSprite2D.material.set_shader_parameter("mix_color", 0);
+	
+	
 func enemy():
 	pass
 	
+
+
+func _on_take_damage_timer_timeout():
+	resetShader()

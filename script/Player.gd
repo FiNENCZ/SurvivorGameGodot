@@ -64,8 +64,23 @@ func detectEnemyDamage(delta):
 				current_health -= (mob.attack_damage/damage_resistance) * delta
 				%HealthBar.value = current_health
 				$HealthValue.text = str(int(current_health))
+				takeDamageAnimation()
 				if current_health <= 0.0:
 					health_depleted.emit()
+					
+func takeDamageAnimation():
+	$AnimatedSprite2D.material.set_shader_parameter("opacity", 0.7);
+	$AnimatedSprite2D.material.set_shader_parameter("r", 1.0);
+	$AnimatedSprite2D.material.set_shader_parameter("g", 0);
+	$AnimatedSprite2D.material.set_shader_parameter("b", 0);
+	$AnimatedSprite2D.material.set_shader_parameter("mix_color", 0.7);
+	$TakeDamageTimer.start()
+	
+
+func resetShader():
+	$AnimatedSprite2D.material.set_shader_parameter("opacity", 1.0);
+	$AnimatedSprite2D.material.set_shader_parameter("mix_color", 0);
+	
 	
 func shootArrow():
 	bow_cooldown = false
@@ -139,4 +154,5 @@ func collect(item):
 	inv.insert(item)
 	
 
-
+func _on_take_damage_timer_timeout():
+	resetShader()

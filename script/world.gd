@@ -3,7 +3,6 @@ extends Node2D
 var enemies_per_wave = 5
 var wave_countdown_duration = 20
 var current_wave_enemies = 0
-var wave_timer
 
 var slime = preload("res://scenes/slime.tscn")
 
