@@ -8,7 +8,7 @@ signal addArrow()
 signal increaseMaxHealth(value)
 signal setFrozenArrows()
 signal setFireArrows()
-signal setKnockArrow()
+signal setKnockArrows()
 signal increaseDamageResistance(value)
 
 func _ready():

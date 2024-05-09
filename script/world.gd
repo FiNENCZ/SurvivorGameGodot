@@ -1,6 +1,6 @@
 extends Node2D
 
-var enemies_per_wave = 3
+var enemies_per_wave = 5
 var wave_countdown_duration = 20
 var current_wave_enemies = 0
 var wave_timer
@@ -10,10 +10,17 @@ var slime = preload("res://scenes/slime.tscn")
 var are_emenies_dead = false
 
 func _ready():
-	$RoundTimer.start()
+	#$RoundTimer.start()
 	%SkillMenu.increaseAttackSpeed.connect(onIncreseAttackSpeed)
 	%SkillMenu.increaseMovementSpeed.connect(onIncreaseMovementSpeed)
 	%SkillMenu.increaseAttackDamage.connect(onIncreaseAttackDamage)
+	%SkillMenu.increaseMaxHealth.connect(onIncreaseMaxHealth)
+	%SkillMenu.increaseDamageResistance.connect(onIncreaseDamageResistance)
+	%SkillMenu.addLifeSteal.connect(onAddLifeSteal)
+	%SkillMenu.addArrow.connect(onAddArrow)
+	%SkillMenu.setFrozenArrows.connect(onSetFrozenArrows)
+	%SkillMenu.setFireArrows.connect(onSetFireArrows)
+	%SkillMenu.setKnockArrows.connect(onSetKnockArrows)
 
 func _process(delta):
 	# Aktualizace textu labelu na základě zbývajícího času časovače
@@ -83,7 +90,11 @@ func onAddArrow():
 	pass
 	
 func onIncreaseMaxHealth(value):
-	pass
+	$Player.current_health += value
+	$Player.max_health += value
+	$Player.get_node("HealthBar").max_value = $Player.max_health
+	$Player.get_node("HealthBar").value = $Player.current_health
+	$Player.get_node("HealthValue").text = str(int($Player.current_health))
 	
 func onSetFrozenArrows():
 	pass
@@ -91,11 +102,12 @@ func onSetFrozenArrows():
 func onSetFireArrows():
 	pass
 	
-func onSetKnockArrow():
+func onSetKnockArrows():
 	pass
 	
 func onIncreaseDamageResistance(value):
-	pass
+	$Player.damage_resistance *= value
+	
 	
 	
 	

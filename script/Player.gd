@@ -6,7 +6,8 @@ var default_movement_speed = 100
 var current_movement_speed = 100
 var attack_speed = 0.5
 var attack_damage = 50
-var health = 300
+var current_health = 300
+var max_health = 300
 
 var life_steal = 0
 var damage_resistance = 1
@@ -24,7 +25,9 @@ var arrow = preload("res://scenes/arrow.tscn")
 var mouse_location = null
 
 func _ready():
-	$RoundTimeoutLabel.visible = false
+	%RoundTimeoutLabel.visible = false
+	%HealthBar.max_value = max_health
+	$HealthValue.text = str(int(current_health))
 
 func _physics_process(delta):
 	mouse_location = get_global_mouse_position() - self.position
@@ -58,18 +61,24 @@ func detectEnemyDamage(delta):
 	if overlapping_mobs.size() > 0:
 		for mob in overlapping_mobs:
 			if mob.has_method("enemy"):
-				health -= mob.attack_damage * delta
-				print(health)
-				if health <= 0.0:
+				current_health -= (mob.attack_damage/damage_resistance) * delta
+				%HealthBar.value = current_health
+				$HealthValue.text = str(int(current_health))
+				if current_health <= 0.0:
 					health_depleted.emit()
 	
 func shootArrow():
 	bow_cooldown = false
 	var arrow_instance = arrow.instantiate()
+	var arrow_instance2 = arrow.instantiate()
 	arrow_instance.damage = attack_damage
 	arrow_instance.rotation = $Marker2D.rotation
-	arrow_instance.global_position = $Marker2D.global_position
+	arrow_instance.global_position = $Marker2D.global_position + Vector2(2, 2)
+	arrow_instance2.damage = attack_damage
+	arrow_instance2.rotation = $Marker2D.rotation
+	arrow_instance2.global_position = $Marker2D.global_position - Vector2(2, 2)
 	add_child(arrow_instance)
+	add_child(arrow_instance2)
 	
 	await get_tree().create_timer(attack_speed).timeout
 	bow_cooldown = true
