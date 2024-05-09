@@ -69,17 +69,22 @@ func detectEnemyDamage(delta):
 	
 func shootArrow():
 	bow_cooldown = false
-	var arrow_instance = arrow.instantiate()
-	var arrow_instance2 = arrow.instantiate()
-	arrow_instance.damage = attack_damage
-	arrow_instance.rotation = $Marker2D.rotation
-	arrow_instance.global_position = $Marker2D.global_position + Vector2(2, 2)
-	arrow_instance2.damage = attack_damage
-	arrow_instance2.rotation = $Marker2D.rotation
-	arrow_instance2.global_position = $Marker2D.global_position - Vector2(2, 2)
-	add_child(arrow_instance)
-	add_child(arrow_instance2)
+	var x_value = 2 if mouse_location.x < 0 else -2
+	var y_value = 2 if mouse_location.y < 0 else -2
 	
+	for i in arrow_number:
+		print(i)
+		var arrow_instance = arrow.instantiate()
+		arrow_instance.damage = attack_damage
+		arrow_instance.rotation = $Marker2D.rotation
+		
+		if i == 0:
+			arrow_instance.global_position = $Marker2D.global_position + Vector2(x_value, y_value)
+		else:
+			arrow_instance.global_position = $Marker2D.global_position - Vector2(x_value, y_value)
+			
+		add_child(arrow_instance)
+		
 	await get_tree().create_timer(attack_speed).timeout
 	bow_cooldown = true
 	

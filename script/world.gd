@@ -97,13 +97,13 @@ func onIncreaseMaxHealth(value):
 	$Player.get_node("HealthValue").text = str(int($Player.current_health))
 	
 func onSetFrozenArrows():
-	pass
+	$Player.arrow_type = 'frozen'
 	
 func onSetFireArrows():
-	pass
+	$Player.arrow_type = 'fire'
 	
 func onSetKnockArrows():
-	pass
+	$Player.arrow_type = 'knock'
 	
 func onIncreaseDamageResistance(value):
 	$Player.damage_resistance *= value
