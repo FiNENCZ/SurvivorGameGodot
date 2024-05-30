@@ -38,8 +38,6 @@ func _physics_process(delta):
 		else:
 			$AnimatedSprite2D.play("idle")
 			
-	if dead:
-		$DetectionArea/CollisionShape2D.disabled = true
 
 func _on_detection_area_body_entered(body):
 	if body.has_method("player"):
@@ -72,9 +70,24 @@ func take_damage(damage, arrow_type, direction=Vector2.ZERO):
 func death():
 	enemy_killed.emit(global_position)
 	dead = true
+	removeEnemyCollisionShape()
 	$AnimatedSprite2D.play("death")
 	await get_tree().create_timer(1).timeout
 	queue_free()
+	
+func removeEnemyCollisionShape():
+	var hitbox = $HitBox
+	remove_child(hitbox)
+	hitbox.queue_free()
+	
+	var detection_area = $DetectionArea
+	remove_child(detection_area)
+	detection_area.queue_free()
+	
+	var collision_shape = $CollisionShape2D
+	remove_child(collision_shape)
+	collision_shape.queue_free()
+	
 	
 func takeDamageAnimation():
 	setDamageShader()

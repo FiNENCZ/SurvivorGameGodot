@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dag6phs4tm1i1"]
+[gd_scene load_steps=16 format=3 uid="uid://dag6phs4tm1i1"]
 
 [ext_resource type="Script" path="res://script/world.gd" id="1_lb3in"]
 [ext_resource type="PackedScene" uid="uid://bpefvxdactbjx" path="res://scenes/player.tscn" id="1_xxbg0"]
@@ -8,7 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://b146r012pqxby" path="res://resources/enviroment/survivalgame-terrian-water.png" id="5_eso2m"]
 [ext_resource type="PackedScene" uid="uid://c0w1qgy41uwo6" path="res://scenes/apple_tree.tscn" id="6_vgiec"]
 [ext_resource type="PackedScene" uid="uid://baddo8yh7xm33" path="res://scenes/stick_collectable.tscn" id="7_sycq4"]
-[ext_resource type="PackedScene" uid="uid://0h5avktloyo5" path="res://scenes/slime.tscn" id="8_wxbrn"]
 [ext_resource type="PackedScene" uid="uid://dylgdhhbs5gqn" path="res://scenes/skill_menu.tscn" id="10_1fpgo"]
 [ext_resource type="PackedScene" uid="uid://bjgxtwfeg115x" path="res://scenes/pause_menu.tscn" id="10_eb3gi"]
 
@@ -783,9 +782,6 @@ position = Vector2(36, -21)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Collisions"]
 polygon = PackedVector2Array(407, -322, 405, 342, -453, 343, -454, 116, -426, 116, -424, 191, -335, 193, -330, 31, -346, 23, -454, 23, -451, -324, 380, -324, 397, -324, 408, -324, 411, -330, 429, -349, 316, -400, 85, -424, -393, -431, -577, -303, -643, 74, -510, 455, -83, 470, 453, 428, 618, 322, 569, -182, 484, -335)
-
-[node name="Slime" parent="." instance=ExtResource("8_wxbrn")]
-position = Vector2(254, 118)
 
 [node name="RoundTimer" type="Timer" parent="."]
 wait_time = 5.0

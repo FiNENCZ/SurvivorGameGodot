@@ -7,13 +7,13 @@ var current_wave_enemies = 0
 var are_emenies_dead = false
 
 var enemy_scenes = {
-	"slime": preload("res://scenes/slime.tscn"),
+	"slime_green": preload("res://scenes/slime_green.tscn"),
 	"slime_red": preload("res://scenes/slime_red.tscn"),
 	"slime_grey": preload("res://scenes/slime_grey.tscn")
 }
 
 var enemy_signal_function_name = {
-	"slime": "on_enemy_killed",
+	"slime_green": "on_enemy_killed",
 	"slime_red": "on_enemy_killed",
 	"slime_grey": "on_slime_grey_killed",
 	"slime_yellow": "on_enemy_killed",
@@ -46,8 +46,7 @@ func _process(delta):
 
 	
 func start_wave():
-	current_wave_enemies = enemies_per_wave
-	spawn_enemies(current_wave_enemies)
+	round_one()
 	
 func getSlimeParameters(slime_name):
 	return [enemy_scenes.get(slime_name, null), enemy_signal_function_name.get(slime_name, null)]
@@ -58,12 +57,17 @@ func spawn_enemies(amount):
 		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
 		spawn_new_slime(spawn_position, getSlimeParameters("slime_grey"))
 
+func round_one():
+	for i in range(8):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_green"))
+	
+
 
 func on_slime_grey_killed(klled_slime_grey_position):
 	current_wave_enemies -= 1
 	for i in range(4):
 		var new_slime_position = klled_slime_grey_position
-		print(i)
 		if i == 0:
 			new_slime_position.x += 10
 		if i == 1:
@@ -73,11 +77,7 @@ func on_slime_grey_killed(klled_slime_grey_position):
 		if i == 3:
 			new_slime_position.y -= 10
 			
-		print(klled_slime_grey_position)
-			
-			
-		current_wave_enemies += 1
-		call_deferred("spawn_new_slime", new_slime_position, getSlimeParameters("slime"))
+		call_deferred("spawn_new_slime", new_slime_position, getSlimeParameters("slime_green"))
 
 func spawn_new_slime(position, enemy_parameters):
 	var enemy_scene = enemy_parameters[0]
@@ -86,9 +86,13 @@ func spawn_new_slime(position, enemy_parameters):
 	if enemy_scene != null:
 		var enemy_instance = enemy_scene.instantiate()
 		var signal_callable = Callable(self, signal_function_name)
+		print(signal_function_name)
 		enemy_instance.enemy_killed.connect(signal_callable)
 		enemy_instance.position = position
 		add_child(enemy_instance)
+		current_wave_enemies += 1
+		
+		print(current_wave_enemies)
 	
 	
 func find_valid_spawn_position(player_position, max_distance, min_distance):
@@ -107,7 +111,7 @@ func _on_round_timer_timeout():
 	$Player.get_node("RoundTimeoutLabel").text = "0"
 	start_wave()
 	
-func on_enemy_killed():
+func on_enemy_killed(klled_enemy_position):
 	current_wave_enemies -= 1
 	print(current_wave_enemies)
 	if current_wave_enemies <= 0:
