@@ -1,12 +1,16 @@
 extends Area2D
 
 signal player_deal_damage(damage)
+signal trigger_life_steal()
 
 var travelled_distance = 0
 var damage
+var arrow_type = "normal"
+var direction = Vector2.ZERO
 
 func _ready():
 	set_as_top_level(true)
+	direction = Vector2.RIGHT.rotated(rotation)
 
 
 
@@ -30,4 +34,5 @@ func arrow_deal_damage():
 func _on_body_entered(body):
 	if body.has_method("enemy"):
 		queue_free()
-		body.take_damage(damage)
+		body.take_damage(damage, arrow_type, direction)
+		emit_signal("trigger_life_steal")

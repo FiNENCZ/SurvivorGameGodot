@@ -88,8 +88,9 @@ func shootArrow():
 	var y_value = 2 if mouse_location.y < 0 else -2
 	
 	for i in arrow_number:
-		print(i)
 		var arrow_instance = arrow.instantiate()
+		arrow_instance.arrow_type = arrow_type
+		arrow_instance.trigger_life_steal.connect(on_trigger_life_steal)
 		arrow_instance.damage = attack_damage
 		arrow_instance.rotation = $Marker2D.rotation
 		
@@ -156,3 +157,13 @@ func collect(item):
 
 func _on_take_damage_timer_timeout():
 	resetShader()
+	
+func on_trigger_life_steal():
+	current_health += life_steal
+	if current_health > max_health:
+		current_health = max_health
+	
+	%HealthBar.value = current_health
+	$HealthValue.text = str(int(current_health))
+
+	

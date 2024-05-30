@@ -9,7 +9,7 @@ var slime = preload("res://scenes/slime.tscn")
 var are_emenies_dead = false
 
 func _ready():
-	#$RoundTimer.start()
+	$RoundTimer.start()
 	%SkillMenu.increaseAttackSpeed.connect(onIncreseAttackSpeed)
 	%SkillMenu.increaseMovementSpeed.connect(onIncreaseMovementSpeed)
 	%SkillMenu.increaseAttackDamage.connect(onIncreaseAttackDamage)
@@ -83,10 +83,11 @@ func onIncreaseMovementSpeed(value):
 	$Player.default_movement_speed *= value
 	
 func onAddLifeSteal(value):
-	pass
+	$Player.life_steal += value
 	
 func onAddArrow():
-	pass
+	if $Player.arrow_number < 3:
+		$Player.arrow_number += 1
 	
 func onIncreaseMaxHealth(value):
 	$Player.current_health += value

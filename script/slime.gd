@@ -1,10 +1,18 @@
 extends CharacterBody2D
 
-var speed = 40
+var default_speed = 40
+var current_speed = 40
 var health = 100
 var attack_damage = 50
+var mob_modification = "normal"
+
+var count_fire_damage_ticks = 0
+var fire_damage_tick = 40
+var fire_modification_interval = 3
 
 var player_damage = 50
+
+
 
 var dead = false
 var player_in_area = false
@@ -12,15 +20,16 @@ var player
 
 signal enemy_killed
 
-func _read():
+func _ready():
 	dead = false
+	set_individual_shader_for_every_instance()
 
 func _physics_process(delta):
 	if !dead:
 		$DetectionArea/CollisionShape2D.disabled = false
 		if player_in_area:
 			var direction = global_position.direction_to(player.global_position)
-			velocity = direction * speed
+			velocity = direction * current_speed
 			move_and_slide()
 			$AnimatedSprite2D.play("move")
 		else:
@@ -42,11 +51,18 @@ func _on_detection_area_body_exited(body):
 		player_in_area = false
 
 		
-func take_damage(damage):
+func take_damage(damage, arrow_type, direction=Vector2.ZERO):
 	health = health - damage
 	takeDamageAnimation()
+	print(arrow_type)
 	if health <= 0 and !dead:
 		death()
+	if arrow_type == "frozen":
+		froze_enemy()
+	if arrow_type == "fire":
+		apply_damage_over_time()
+	if arrow_type == "knock":
+		apply_knockback(direction)
 		
 func death():
 	enemy_killed.emit()
@@ -57,11 +73,7 @@ func death():
 	queue_free()
 	
 func takeDamageAnimation():
-	$AnimatedSprite2D.material.set_shader_parameter("opacity", 0.7);
-	$AnimatedSprite2D.material.set_shader_parameter("r", 1.0);
-	$AnimatedSprite2D.material.set_shader_parameter("g", 0);
-	$AnimatedSprite2D.material.set_shader_parameter("b", 0);
-	$AnimatedSprite2D.material.set_shader_parameter("mix_color", 0.7);
+	setDamageShader()
 	$TakeDamageTimer.start()
 	
 
@@ -69,11 +81,87 @@ func resetShader():
 	$AnimatedSprite2D.material.set_shader_parameter("opacity", 1.0);
 	$AnimatedSprite2D.material.set_shader_parameter("mix_color", 0);
 	
+
+
+func _on_take_damage_timer_timeout():
+	if mob_modification == "normal":
+		resetShader()
+	elif mob_modification == "frozen":
+		setFrozenShader()
+	
+func froze_enemy():
+	current_speed *= 0.6
+	mob_modification = "frozen"
+	$FrozeEnemyTimer.start()
+	
+func fire_enemy():
+	mob_modification = "fire"
+
+func setDamageShader():
+	$AnimatedSprite2D.material.set_shader_parameter("opacity", 0.7);
+	$AnimatedSprite2D.material.set_shader_parameter("r", 1.0);
+	$AnimatedSprite2D.material.set_shader_parameter("g", 0);
+	$AnimatedSprite2D.material.set_shader_parameter("b", 0);
+	$AnimatedSprite2D.material.set_shader_parameter("mix_color", 0.7);
+	
+func setFrozenShader():
+	$AnimatedSprite2D.material.set_shader_parameter("opacity", 0.7);
+	$AnimatedSprite2D.material.set_shader_parameter("r", 0.1);
+	$AnimatedSprite2D.material.set_shader_parameter("g", 0.1);
+	$AnimatedSprite2D.material.set_shader_parameter("b", 1);
+	$AnimatedSprite2D.material.set_shader_parameter("mix_color", 0.7);
+
+func setFireShader():
+	$AnimatedSprite2D.material.set_shader_parameter("opacity", 0.7);
+	$AnimatedSprite2D.material.set_shader_parameter("r", 1);
+	$AnimatedSprite2D.material.set_shader_parameter("g", 0.5);
+	$AnimatedSprite2D.material.set_shader_parameter("b", 0.15);
+	$AnimatedSprite2D.material.set_shader_parameter("mix_color", 0.7);
+
+
+func _on_froze_enemy_timer_timeout():
+	current_speed = default_speed
+	mob_modification = "normal"
+	resetShader()
+
+
+func _on_fire_enemy_timer_timeout():
+	apply_damage_tick()
+	
+func set_individual_shader_for_every_instance():
+	var new_material = $AnimatedSprite2D.material.duplicate()
+	$AnimatedSprite2D.material = new_material
+	
+func apply_damage_over_time():
+	if $FireEnemyTimer.is_stopped() == false:
+		$FireEnemyTimer.stop()
+	
+	count_fire_damage_ticks = 0
+	$FireEnemyTimer.start()
+
+# Tato funkce se volá fire_damage_tick_interval
+func apply_damage_tick():
+	if health > 0:
+		health -= fire_damage_tick
+		if health <= 0:
+			death()
+			
+	applyFireAnimation()
+	
+	count_fire_damage_ticks += 1
+	if count_fire_damage_ticks >= fire_modification_interval:
+		$FireEnemyTimer.stop()
+
+func applyFireAnimation():
+	setFireShader()
+	await get_tree().create_timer(0.15).timeout
+	resetShader()
+	
+func apply_knockback(direction):
+	var knockback_force = 7 # Adjust the force as needed
+	position += direction.normalized() * knockback_force
+	
 	
 func enemy():
 	pass
 	
-
-
-func _on_take_damage_timer_timeout():
-	resetShader()

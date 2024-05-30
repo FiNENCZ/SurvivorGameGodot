@@ -4,13 +4,13 @@
 [ext_resource type="Texture2D" uid="uid://de113h7evhxk5" path="res://resources/character/survivalgame-enemy-slime.png" id="1_wt8s3"]
 [ext_resource type="Shader" path="res://scenes/damage_shader.gdshader" id="2_ecpka"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_suc45"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_hqjs0"]
 shader = ExtResource("2_ecpka")
 shader_parameter/opacity = 1.0
 shader_parameter/r = null
 shader_parameter/g = null
 shader_parameter/b = null
-shader_parameter/mix_color = null
+shader_parameter/mix_color = 0.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h8lxw"]
 atlas = ExtResource("1_wt8s3")
@@ -169,7 +169,7 @@ radius = 2270.77
 script = ExtResource("1_ormhe")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-material = SubResource("ShaderMaterial_suc45")
+material = SubResource("ShaderMaterial_hqjs0")
 sprite_frames = SubResource("SpriteFrames_pudlq")
 animation = &"idle"
 
@@ -189,9 +189,17 @@ shape = SubResource("CircleShape2D_kxmr3")
 shape = SubResource("CircleShape2D_u7gbk")
 
 [node name="TakeDamageTimer" type="Timer" parent="."]
-wait_time = 0.1
+wait_time = 0.12
+one_shot = true
+
+[node name="FireEnemyTimer" type="Timer" parent="."]
+
+[node name="FrozeEnemyTimer" type="Timer" parent="."]
+wait_time = 3.0
 
 [connection signal="area_entered" from="HitBox" to="." method="_on_hit_box_area_entered"]
 [connection signal="body_entered" from="DetectionArea" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="DetectionArea" to="." method="_on_detection_area_body_exited"]
 [connection signal="timeout" from="TakeDamageTimer" to="." method="_on_take_damage_timer_timeout"]
+[connection signal="timeout" from="FireEnemyTimer" to="." method="_on_fire_enemy_timer_timeout"]
+[connection signal="timeout" from="FrozeEnemyTimer" to="." method="_on_froze_enemy_timer_timeout"]

@@ -126,9 +126,10 @@ text = "Movement Speed + 10%"
 [node name="btnSkillLifeSteal" type="Button" parent="PanelContainer/HBoxContainer"]
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-text = "Life Steal"
+text = "Life Steal +3 HP"
 
 [node name="btnSkillTwoArrows" type="Button" parent="PanelContainer/HBoxContainer"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 text = "Two Arrows"

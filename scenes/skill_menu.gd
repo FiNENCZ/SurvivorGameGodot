@@ -67,11 +67,14 @@ func _on_btn_skill_movement_speed_pressed():
 
 
 func _on_btn_skill_life_steal_pressed():
-	emit_signal("addLifeSteal", 8)
+	emit_signal("addLifeSteal", 3)
 
 
 func _on_btn_skill_two_arrows_pressed():
-	emit_signal("addArrow", 1)
+	emit_signal("addArrow")
+	var button = %btnSkillTwoArrows
+	%HBoxContainer.remove_child(button)
+	button.queue_free()
 
 
 func _on_btn_skill_max_health_pressed():
@@ -87,7 +90,7 @@ func _on_btn_skill_frozen_arrows_pressed():
 
 
 func _on_btn_skill_knock_arrows_pressed():
-	emit_signal("setKnockArrow")
+	emit_signal("setKnockArrows")
 
 
 func _on_btn_skill_damage_resistance_pressed():
