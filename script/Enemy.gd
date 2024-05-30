@@ -21,7 +21,7 @@ var dead = false
 var player_in_area = false
 var player
 
-signal enemy_killed
+signal enemy_killed(position)
 
 func _ready():
 	dead = false
@@ -70,8 +70,7 @@ func take_damage(damage, arrow_type, direction=Vector2.ZERO):
 		apply_knockback(direction)
 		
 func death():
-	enemy_killed.emit()
-	print("ano, je killed")
+	enemy_killed.emit(global_position)
 	dead = true
 	$AnimatedSprite2D.play("death")
 	await get_tree().create_timer(1).timeout

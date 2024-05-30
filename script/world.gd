@@ -4,10 +4,21 @@ var enemies_per_wave = 5
 var wave_countdown_duration = 20
 var current_wave_enemies = 0
 
-var slime = preload("res://scenes/slime.tscn")
-var slime_red = preload("res://scenes/slime_red.tscn")
-
 var are_emenies_dead = false
+
+var enemy_scenes = {
+	"slime": preload("res://scenes/slime.tscn"),
+	"slime_red": preload("res://scenes/slime_red.tscn"),
+	"slime_grey": preload("res://scenes/slime_grey.tscn")
+}
+
+var enemy_signal_function_name = {
+	"slime": "on_enemy_killed",
+	"slime_red": "on_enemy_killed",
+	"slime_grey": "on_slime_grey_killed",
+	"slime_yellow": "on_enemy_killed",
+	"slime_purple": "on_enemy_killed"
+}
 
 func _ready():
 	$RoundTimer.start()
@@ -37,28 +48,49 @@ func _process(delta):
 func start_wave():
 	current_wave_enemies = enemies_per_wave
 	spawn_enemies(current_wave_enemies)
+	
+func getSlimeParameters(slime_name):
+	return [enemy_scenes.get(slime_name, null), enemy_signal_function_name.get(slime_name, null)]
 
 		
 func spawn_enemies(amount):
 	for i in range(amount):
-		var slime_instance = slime.instantiate()
-		slime_instance.enemy_killed.connect(on_enemy_killed)
-		
-		var slime_red_instance = slime_red.instantiate()
-		slime_red_instance.enemy_killed.connect(on_enemy_killed)
-		
-		
-		# Umístění nepřátel na mapě tak, aby nebyli příliš blízko hráče
 		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
-		slime_instance.position = spawn_position
-		
-		add_child(slime_instance)
-		
-		slime_red_instance.position = spawn_position
-		
-		add_child(slime_red_instance)
-	
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_grey"))
 
+
+func on_slime_grey_killed(klled_slime_grey_position):
+	current_wave_enemies -= 1
+	for i in range(4):
+		var new_slime_position = klled_slime_grey_position
+		print(i)
+		if i == 0:
+			new_slime_position.x += 10
+		if i == 1:
+			new_slime_position.x -= 10
+		if i == 2:
+			new_slime_position.y += 10
+		if i == 3:
+			new_slime_position.y -= 10
+			
+		print(klled_slime_grey_position)
+			
+			
+		current_wave_enemies += 1
+		call_deferred("spawn_new_slime", new_slime_position, getSlimeParameters("slime"))
+
+func spawn_new_slime(position, enemy_parameters):
+	var enemy_scene = enemy_parameters[0]
+	var signal_function_name = enemy_parameters[1]
+	
+	if enemy_scene != null:
+		var enemy_instance = enemy_scene.instantiate()
+		var signal_callable = Callable(self, signal_function_name)
+		enemy_instance.enemy_killed.connect(signal_callable)
+		enemy_instance.position = position
+		add_child(enemy_instance)
+	
+	
 func find_valid_spawn_position(player_position, max_distance, min_distance):
 	var spawn_position = Vector2.ZERO
 	var distance = 0
