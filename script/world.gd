@@ -5,6 +5,7 @@ var wave_countdown_duration = 20
 var current_wave_enemies = 0
 
 var slime = preload("res://scenes/slime.tscn")
+var slime_red = preload("res://scenes/slime_red.tscn")
 
 var are_emenies_dead = false
 
@@ -43,11 +44,19 @@ func spawn_enemies(amount):
 		var slime_instance = slime.instantiate()
 		slime_instance.enemy_killed.connect(on_enemy_killed)
 		
+		var slime_red_instance = slime_red.instantiate()
+		slime_red_instance.enemy_killed.connect(on_enemy_killed)
+		
+		
 		# Umístění nepřátel na mapě tak, aby nebyli příliš blízko hráče
 		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
 		slime_instance.position = spawn_position
 		
 		add_child(slime_instance)
+		
+		slime_red_instance.position = spawn_position
+		
+		add_child(slime_red_instance)
 	
 
 func find_valid_spawn_position(player_position, max_distance, min_distance):

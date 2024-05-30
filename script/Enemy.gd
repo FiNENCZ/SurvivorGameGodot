@@ -1,5 +1,8 @@
 extends CharacterBody2D
 
+
+class_name Enemy
+
 var default_speed = 40
 var current_speed = 40
 var health = 100
