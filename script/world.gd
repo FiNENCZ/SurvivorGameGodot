@@ -34,6 +34,11 @@ var enemy_reproduction_signal = {
 
 func _ready():
 	$RoundTimer.start()
+	%RoundTimeoutLabel.visible = false
+	var player_max_health = 200
+	%HealthBar.max_value = player_max_health
+	%HealthValue.text = str(int(player_max_health))
+	
 	%SkillMenu.increaseAttackSpeed.connect(onIncreseAttackSpeed)
 	%SkillMenu.increaseMovementSpeed.connect(onIncreaseMovementSpeed)
 	%SkillMenu.increaseAttackDamage.connect(onIncreaseAttackDamage)
@@ -44,19 +49,23 @@ func _ready():
 	%SkillMenu.setFrozenArrows.connect(onSetFrozenArrows)
 	%SkillMenu.setFireArrows.connect(onSetFireArrows)
 	%SkillMenu.setKnockArrows.connect(onSetKnockArrows)
+	
+	$Player.player_change_health.connect(_on_player_change_health)
 	$Player.health_depleted.connect(_on_player_health_depleted)
 	$Player.resetShader()
+	
+
 
 func _process(delta):
 	# Aktualizace textu labelu na základě zbývajícího času časovače
 	if are_emenies_dead:
-		$Player.get_node("RoundTimeoutLabel").visible = true
-		$Player.get_node("RoundTimeoutLabel").text = str(round($RoundTimer.time_left))
+		%RoundTimeoutLabel.visible = true
+		%RoundTimeoutLabel.text = str(round($RoundTimer.time_left))
 		
 		# Aby se nezobrazovala nula na countdownu
 		if $RoundTimer.time_left < 1:
 			await get_tree().create_timer(0.5).timeout
-			$Player.get_node("RoundTimeoutLabel").visible = false
+			%RoundTimeoutLabel.visible = false
 
 	
 func start_wave():
@@ -125,8 +134,8 @@ func find_valid_spawn_position(player_position, max_distance, min_distance):
 func _on_round_timer_timeout():
 	#$CanvasLayer2/SkillMenu.pause()
 	are_emenies_dead = false
-	$Player.get_node("RoundTimeoutLabel").visible = false
-	$Player.get_node("RoundTimeoutLabel").text = "0"
+	%RoundTimeoutLabel.visible = false
+	%RoundTimeoutLabel.text = "0"
 	start_wave()
 	
 func on_enemy_killed(klled_enemy_position):
@@ -139,16 +148,20 @@ func on_enemy_killed(klled_enemy_position):
 func show_win_screen():
 	%YouWin.visible = true
 	get_tree().paused = true
-	await get_tree().create_timer(3.5).timeout
+	await get_tree().create_timer(3).timeout
 	%YouWin.visible = false
 	%PauseMenu.pause()
 	
 func _on_player_health_depleted():
 	%GameOver.visible = true
 	get_tree().paused = true
-	await get_tree().create_timer(3.5).timeout
+	await get_tree().create_timer(2.25).timeout
 	%GameOver.visible = false
 	%PauseMenu.pause()
+	
+func _on_player_change_health(current_health):
+	%HealthBar.value = current_health
+	%HealthValue.text = str(int(current_health))
 		
 ######## -- APPLY SKILLS -- #######
 		
@@ -171,9 +184,9 @@ func onAddArrow():
 func onIncreaseMaxHealth(value):
 	$Player.current_health += value
 	$Player.max_health += value
-	$Player.get_node("HealthBar").max_value = $Player.max_health
-	$Player.get_node("HealthBar").value = $Player.current_health
-	$Player.get_node("HealthValue").text = str(int($Player.current_health))
+	%HealthBar.max_value = $Player.max_health
+	%HealthBar.value = $Player.current_health
+	%HealthValue.text = str(int($Player.current_health))
 	
 func onSetFrozenArrows():
 	$Player.arrow_type = 'frozen'
@@ -271,8 +284,8 @@ func round_nine():
 	for i in range(100):
 		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
 		spawn_new_slime(spawn_position, getSlimeParameters("slime_green"))
-		if (i % 20) == 0:
-			await get_tree().create_timer(3).timeout
+		if (i != 0) || ((i % 20) == 0):
+			await get_tree().create_timer(2.5).timeout
 			
 func round_ten():
 	for i in range(20):

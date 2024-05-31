@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 signal health_depleted
+signal player_change_health(health)
 
 var default_movement_speed = 100
 var current_movement_speed = 100
@@ -24,11 +25,7 @@ var bow_cooldown = true
 var arrow = preload("res://scenes/arrow.tscn")
 var mouse_location = null
 
-func _ready():
-	%RoundTimeoutLabel.visible = false
-	%HealthBar.max_value = max_health
-	$HealthValue.text = str(int(current_health))
-
+	
 func _physics_process(delta):
 	mouse_location = get_global_mouse_position() - self.position
 	var direction = Input.get_vector("left", "right", "up", "down")
@@ -62,8 +59,7 @@ func detectEnemyDamage(delta):
 		for mob in overlapping_mobs:
 			if mob.has_method("enemy"):
 				current_health -= (mob.attack_damage/damage_resistance) * delta
-				%HealthBar.value = current_health
-				$HealthValue.text = str(int(current_health))
+				player_change_health.emit(current_health)
 				takeDamageAnimation()
 				if current_health <= 0.0:
 					health_depleted.emit()
@@ -164,7 +160,6 @@ func on_trigger_life_steal():
 	if current_health > max_health:
 		current_health = max_health
 	
-	%HealthBar.value = current_health
-	$HealthValue.text = str(int(current_health))
+	player_change_health.emit(current_health)
 
 	

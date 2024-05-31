@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://dag6phs4tm1i1"]
+[gd_scene load_steps=18 format=3 uid="uid://dag6phs4tm1i1"]
 
 [ext_resource type="Script" path="res://script/world.gd" id="1_lb3in"]
 [ext_resource type="PackedScene" uid="uid://bpefvxdactbjx" path="res://scenes/player.tscn" id="1_xxbg0"]
@@ -742,6 +742,20 @@ sources/2 = SubResource("TileSetAtlasSource_qcgpa")
 sources/3 = SubResource("TileSetAtlasSource_en8i8")
 sources/4 = SubResource("TileSetAtlasSource_ivlfb")
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vdqjf"]
+bg_color = Color(0.152941, 0.168627, 0.188235, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ehg7e"]
+bg_color = Color(0.321569, 0.698039, 0.298039, 1)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
+
 [node name="World" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_lb3in")
@@ -854,5 +868,52 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 90
 text = "You Win!"
+
+[node name="StatusBarCanvas" type="CanvasLayer" parent="."]
+
+[node name="RoundTimeoutLabel" type="Label" parent="StatusBarCanvas"]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 23.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 55
+text = "99"
+horizontal_alignment = 1
+
+[node name="HealthBar" type="ProgressBar" parent="StatusBarCanvas"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 40)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 26.0
+offset_top = -39.0
+offset_right = 226.0
+offset_bottom = -19.0
+grow_vertical = 0
+theme_override_styles/background = SubResource("StyleBoxFlat_vdqjf")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ehg7e")
+max_value = 300.0
+value = 300.0
+show_percentage = false
+
+[node name="HealthValue" type="Label" parent="StatusBarCanvas"]
+unique_name_in_owner = true
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 122.0
+offset_top = -97.0
+offset_right = 176.0
+offset_bottom = -52.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 32
+text = "300"
+horizontal_alignment = 1
 
 [connection signal="timeout" from="RoundTimer" to="." method="_on_round_timer_timeout"]
