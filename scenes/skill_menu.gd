@@ -14,8 +14,8 @@ signal increaseDamageResistance(value)
 func _ready():
 	$AnimationPlayer.play("RESET")
 	
-#func _process(delta):
-	#showSkillMenu()
+func _process(delta):
+	showSkillMenu()
 
 func hide_skills():
 	visible = false
@@ -28,11 +28,11 @@ func show_skills():
 	get_tree().paused = true
 	$AnimationPlayer.play("blur")
 
-#func showSkillMenu():
-	#if Input.is_action_just_pressed("x") and get_tree().paused == false:
-		#showSkills()
-	#elif Input.is_action_just_pressed("x") and get_tree().paused == true:
-		#start()
+func showSkillMenu():
+	if Input.is_action_just_pressed("x") and get_tree().paused == false:
+		show_skills()
+	elif Input.is_action_just_pressed("x") and get_tree().paused == true:
+		hide_skills()
 		
 func getSkillsRandomly():
 	var num_buttons = %HBoxContainer.get_child_count()
