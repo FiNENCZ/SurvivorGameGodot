@@ -11,11 +11,17 @@ signal setFireArrows()
 signal setKnockArrows()
 signal increaseDamageResistance(value)
 
+var skill_button_texture = preload("res://resources/invertory_art/inventory-background.png")
+
+
+
 func _ready():
 	$AnimationPlayer.play("RESET")
+	set_skill_btn_textures()
 	
-func _process(delta):
-	showSkillMenu()
+
+#func _process(delta):
+	#showSkillMenu()
 
 func hide_skills():
 	visible = false
@@ -28,11 +34,11 @@ func show_skills():
 	get_tree().paused = true
 	$AnimationPlayer.play("blur")
 
-func showSkillMenu():
-	if Input.is_action_just_pressed("x") and get_tree().paused == false:
-		show_skills()
-	elif Input.is_action_just_pressed("x") and get_tree().paused == true:
-		hide_skills()
+#func showSkillMenu():
+	#if Input.is_action_just_pressed("x") and get_tree().paused == false:
+		#show_skills()
+	#elif Input.is_action_just_pressed("x") and get_tree().paused == true:
+		#hide_skills()
 		
 func getSkillsRandomly():
 	var num_buttons = %HBoxContainer.get_child_count()
@@ -52,6 +58,22 @@ func getSkillsRandomly():
 	for i in range(num_buttons):
 		var button = %HBoxContainer.get_child(i)
 		button.visible = i in visible_indices
+
+func set_skill_btn_textures():
+	var stylebox_texture = StyleBoxTexture.new()
+	stylebox_texture.texture = skill_button_texture
+	
+	var hbox_container = %HBoxContainer
+	
+	for child in hbox_container.get_children():
+		if child is Button:
+			child.add_theme_stylebox_override("normal", stylebox_texture)
+			child.add_theme_stylebox_override("pressed", stylebox_texture)
+			child.add_theme_stylebox_override("hover", stylebox_texture)
+			child.add_theme_stylebox_override("disabled", stylebox_texture)
+			child.add_theme_stylebox_override("focused", stylebox_texture)
+			
+	
 
 func _on_btn_skill_attack_speed_pressed():
 	emit_signal("increaseAttackSpeed", 1.1)

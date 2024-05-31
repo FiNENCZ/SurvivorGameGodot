@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dylgdhhbs5gqn"]
+[gd_scene load_steps=16 format=3 uid="uid://dylgdhhbs5gqn"]
 
 [ext_resource type="Script" path="res://scenes/skill_menu.gd" id="1_1twrq"]
 [ext_resource type="Shader" path="res://skill_menu.gdshader" id="1_3mjah"]
@@ -7,6 +7,21 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wmkwn"]
 shader = ExtResource("1_3mjah")
 shader_parameter/lod = 0.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d4its"]
+texture = ExtResource("3_vg4pr")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ukuuk"]
+texture = ExtResource("3_vg4pr")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_chjop"]
+texture = ExtResource("3_vg4pr")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_g61jj"]
+texture = ExtResource("3_vg4pr")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dt3js"]
+texture = ExtResource("3_vg4pr")
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_e8gnw"]
 texture = ExtResource("3_vg4pr")
@@ -119,22 +134,31 @@ layout_mode = 2
 alignment = 1
 
 [node name="btnSkillAttackSpeed" type="Button" parent="PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxTexture_d4its")
+theme_override_styles/hover = SubResource("StyleBoxTexture_ukuuk")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_chjop")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_g61jj")
+theme_override_styles/focus = SubResource("StyleBoxTexture_dt3js")
 text = "Attack Speed +10%"
 
 [node name="btnSkillAttackDamage" type="Button" parent="PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 text = "Attack Damage +10%"
 
 [node name="btnSkillMovementSpeed" type="Button" parent="PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 text = "Movement Speed + 10%"
 
 [node name="btnSkillLifeSteal" type="Button" parent="PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxTexture_e8gnw")
 theme_override_styles/hover = SubResource("StyleBoxTexture_05h80")
@@ -143,32 +167,37 @@ text = "Life Steal +3 HP"
 
 [node name="btnSkillTwoArrows" type="Button" parent="PanelContainer/HBoxContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 0)
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 text = "Two Arrows"
 
 [node name="btnSkillMaxHealth" type="Button" parent="PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 text = "Increase Max Health + 50"
 
 [node name="btnSkillFireArrows" type="Button" parent="PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 text = "Fire Arrows"
 
 [node name="btnSkillFrozenArrows" type="Button" parent="PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 text = "Frozen Arrows"
 
 [node name="btnSkillKnockArrows" type="Button" parent="PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 text = "Knock Arrows"
 
 [node name="btnSkillDamageResistance" type="Button" parent="PanelContainer/HBoxContainer"]
-custom_minimum_size = Vector2(200, 0)
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 text = "Increase Damage 
 Resistance + 20%"
