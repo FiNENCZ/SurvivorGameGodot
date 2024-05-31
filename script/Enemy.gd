@@ -10,7 +10,7 @@ var attack_damage = 50
 var mob_modification = "normal"
 
 var count_fire_damage_ticks = 0
-var fire_damage_tick = 40
+var fire_damage_tick = 20
 var fire_modification_interval = 3
 
 var player_damage = 50

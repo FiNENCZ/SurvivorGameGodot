@@ -7,7 +7,7 @@ var current_wave_enemies = 0
 var current_round_index = 0
 
 var are_emenies_dead = false
-var round_functions = [round_one, round_two, round_three, round_four, round_five]
+var round_functions = [round_one, round_two, round_three, round_four, round_five, round_six, round_seven, round_eight, round_nine, round_ten]
 
 var enemy_scenes = {
 	"slime_green": preload("res://scenes/slime_green.tscn"),
@@ -44,6 +44,8 @@ func _ready():
 	%SkillMenu.setFrozenArrows.connect(onSetFrozenArrows)
 	%SkillMenu.setFireArrows.connect(onSetFireArrows)
 	%SkillMenu.setKnockArrows.connect(onSetKnockArrows)
+	$Player.health_depleted.connect(_on_player_health_depleted)
+	$Player.resetShader()
 
 func _process(delta):
 	# Aktualizace textu labelu na základě zbývajícího času časovače
@@ -63,6 +65,7 @@ func start_wave():
 		current_round_index += 1
 	else:
 		print("All rounds completed")
+		show_win_screen()
 	
 func getSlimeParameters(slime_name):
 	return [enemy_scenes.get(slime_name, null), enemy_signal_function_name.get(slime_name, null), enemy_reproduction_signal.get(slime_name, false)]
@@ -72,52 +75,6 @@ func spawn_enemies(amount):
 	for i in range(amount):
 		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
 		spawn_new_slime(spawn_position, getSlimeParameters("slime_grey"))
-
-func round_one():
-	for i in range(8):
-		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
-		spawn_new_slime(spawn_position, getSlimeParameters("slime_purple"))
-
-func round_two():
-	for i in range(5):
-		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
-		spawn_new_slime(spawn_position, getSlimeParameters("slime_green"))
-	for i in range(6):
-		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
-		spawn_new_slime(spawn_position, getSlimeParameters("slime_red"))
-		
-func round_three():
-	for i in range(8):
-		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
-		spawn_new_slime(spawn_position, getSlimeParameters("slime_green"))
-	await get_tree().create_timer(2.5).timeout
-	for i in range(10):
-		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
-		spawn_new_slime(spawn_position, getSlimeParameters("slime_red"))
-		
-func round_four():
-	for i in range(12):
-		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
-		spawn_new_slime(spawn_position, getSlimeParameters("slime_green"))
-	await get_tree().create_timer(1).timeout
-	for i in range(6):
-		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
-		spawn_new_slime(spawn_position, getSlimeParameters("slime_grey"))
-		
-func round_five():
-	for i in range(12):
-		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
-		spawn_new_slime(spawn_position, getSlimeParameters("slime_red"))
-	await get_tree().create_timer(1).timeout
-	for i in range(10):
-		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
-		spawn_new_slime(spawn_position, getSlimeParameters("slime_green"))
-	await get_tree().create_timer(1).timeout
-	for i in range(8):
-		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
-		spawn_new_slime(spawn_position, getSlimeParameters("slime_grey"))
-	
-
 
 func on_slime_grey_killed(klled_slime_grey_position):
 	current_wave_enemies -= 1
@@ -165,7 +122,6 @@ func find_valid_spawn_position(player_position, max_distance, min_distance):
 	return spawn_position
 
 
-
 func _on_round_timer_timeout():
 	#$CanvasLayer2/SkillMenu.pause()
 	are_emenies_dead = false
@@ -177,7 +133,24 @@ func on_enemy_killed(klled_enemy_position):
 	current_wave_enemies -= 1
 	if current_wave_enemies <= 0:
 		are_emenies_dead = true
+		%SkillMenu.show_skills()
 		$RoundTimer.start()
+
+func show_win_screen():
+	%YouWin.visible = true
+	get_tree().paused = true
+	await get_tree().create_timer(3.5).timeout
+	%YouWin.visible = false
+	%PauseMenu.pause()
+	
+func _on_player_health_depleted():
+	%GameOver.visible = true
+	get_tree().paused = true
+	await get_tree().create_timer(3.5).timeout
+	%GameOver.visible = false
+	%PauseMenu.pause()
+		
+######## -- APPLY SKILLS -- #######
 		
 func onIncreseAttackSpeed(value):
 	$Player.attack_speed /= value
@@ -214,6 +187,109 @@ func onSetKnockArrows():
 func onIncreaseDamageResistance(value):
 	$Player.damage_resistance *= value
 	
+	
+	
+##########  -- ROUNDS --  ##########
+
+func round_one():
+	for i in range(8):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_green"))
+
+func round_two():
+	for i in range(5):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_green"))
+	for i in range(6):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_red"))
+		
+func round_three():
+	for i in range(8):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_green"))
+	await get_tree().create_timer(2.5).timeout
+	for i in range(10):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_red"))
+		
+func round_four():
+	for i in range(12):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_green"))
+	await get_tree().create_timer(1).timeout
+	for i in range(6):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_grey"))
+		
+func round_five():
+	for i in range(12):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_red"))
+	await get_tree().create_timer(1).timeout
+	for i in range(10):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_green"))
+	await get_tree().create_timer(1).timeout
+	for i in range(8):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_grey"))
+		
+func round_six():
+	for i in range(22):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_red"))
+	await get_tree().create_timer(1).timeout
+	for i in range(10):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_purple"))
+
+func round_seven():
+	for i in range(15):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_purple"))
+	await get_tree().create_timer(1).timeout
+	for i in range(15):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_grey"))
+
+
+func round_eight():
+	for i in range(20):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_green"))
+	await get_tree().create_timer(4).timeout
+	for i in range(25):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_red"))
+	await get_tree().create_timer(6).timeout
+	for i in range(15):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_purple"))
+		
+func round_nine():
+	for i in range(100):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_green"))
+		if (i % 20) == 0:
+			await get_tree().create_timer(3).timeout
+			
+func round_ten():
+	for i in range(20):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_grey"))
+	await get_tree().create_timer(5).timeout
+	for i in range(30):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_red"))
+	await get_tree().create_timer(6).timeout
+	for i in range(40):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_green"))
+	await get_tree().create_timer(3).timeout
+	for i in range(30):
+		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
+		spawn_new_slime(spawn_position, getSlimeParameters("slime_purple"))
 	
 	
 	
