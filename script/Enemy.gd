@@ -57,7 +57,6 @@ func set_individual_shader_for_every_instance():
 func take_damage(damage, arrow_type, direction=Vector2.ZERO):
 	health = health - damage
 	takeDamageAnimation()
-	print(arrow_type)
 	if health <= 0 and !dead:
 		death()
 	if arrow_type == "frozen":
@@ -76,17 +75,20 @@ func death():
 	queue_free()
 	
 func removeEnemyCollisionShape():
-	var hitbox = $HitBox
-	remove_child(hitbox)
-	hitbox.queue_free()
+	if $HitBox != null:
+		var hitbox = $HitBox
+		remove_child(hitbox)
+		hitbox.queue_free()
 	
-	var detection_area = $DetectionArea
-	remove_child(detection_area)
-	detection_area.queue_free()
-	
-	var collision_shape = $CollisionShape2D
-	remove_child(collision_shape)
-	collision_shape.queue_free()
+	if $DetectionArea != null:
+		var detection_area = $DetectionArea
+		remove_child(detection_area)
+		detection_area.queue_free()
+
+	if $CollisionShape2D != null:
+		var collision_shape = $CollisionShape2D
+		remove_child(collision_shape)
+		collision_shape.queue_free()
 	
 	
 func takeDamageAnimation():

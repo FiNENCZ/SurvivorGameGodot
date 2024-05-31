@@ -6,8 +6,8 @@ var default_movement_speed = 100
 var current_movement_speed = 100
 var attack_speed = 0.5
 var attack_damage = 50
-var current_health = 300
-var max_health = 300
+var current_health = 200
+var max_health = 200
 
 var life_steal = 0
 var damage_resistance = 1
@@ -67,6 +67,7 @@ func detectEnemyDamage(delta):
 				takeDamageAnimation()
 				if current_health <= 0.0:
 					health_depleted.emit()
+			
 					
 func takeDamageAnimation():
 	$AnimatedSprite2D.material.set_shader_parameter("opacity", 0.7);
