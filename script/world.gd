@@ -284,7 +284,7 @@ func round_nine():
 	for i in range(100):
 		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
 		spawn_new_slime(spawn_position, get_slime_parameters("slime_green"))
-		if (i != 0) || ((i % 20) == 0):
+		if ((i % 20) == 0):
 			await get_tree().create_timer(2.5).timeout
 			
 func round_ten():
@@ -292,15 +292,15 @@ func round_ten():
 		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
 		spawn_new_slime(spawn_position, get_slime_parameters("slime_grey"))
 	await get_tree().create_timer(5).timeout
-	for i in range(30):
+	for i in range(20):
 		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
 		spawn_new_slime(spawn_position, get_slime_parameters("slime_red"))
-	await get_tree().create_timer(6).timeout
-	for i in range(40):
+	await get_tree().create_timer(10).timeout
+	for i in range(20):
 		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
 		spawn_new_slime(spawn_position, get_slime_parameters("slime_green"))
-	await get_tree().create_timer(3).timeout
-	for i in range(30):
+	await get_tree().create_timer(8).timeout
+	for i in range(2):
 		var spawn_position = find_valid_spawn_position($Player.global_position, 400, 150)
 		spawn_new_slime(spawn_position, get_slime_parameters("slime_purple"))
 	
