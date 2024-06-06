@@ -1,19 +1,17 @@
 extends Control
 
-signal increaseAttackDamage(value)
-signal increaseMovementSpeed(value)
-signal increaseAttackSpeed(value)
-signal addLifeSteal(value)
-signal addArrow()
-signal increaseMaxHealth(value)
-signal setFrozenArrows()
-signal setFireArrows()
-signal setKnockArrows()
-signal increaseDamageResistance(value)
+signal increase_attack_damage(value)
+signal increase_movement_speed(value)
+signal increase_attack_speed(value)
+signal add_life_steal(value)
+signal add_arrow()
+signal increase_max_health(value)
+signal set_frozen_arrows()
+signal set_fire_arrows()
+signal set_knock_arrows()
+signal increase_damage_resistance(value)
 
 var skill_button_texture = preload("res://resources/invertory_art/inventory-background.png")
-
-
 
 func _ready():
 	$AnimationPlayer.play("RESET")
@@ -46,15 +44,15 @@ func getSkillsRandomly():
 	const num_visible_buttons = 3
 	var visible_indices = []
 
-	# Generování náhodných indexů prvků, které budou viditelné
+	# Generate random indexes of elements that will be visible
 	for i in range(num_visible_buttons):
 		var index = randi_range(0, num_buttons - 1)
 		while index in visible_indices:
-			# Zajištění, že se žádné dva prvky nebudou opakovat
+			# Ensuring that no two elements are repeated
 			index = randi_range(0, num_buttons - 1)
 		visible_indices.append(index)
 
-	# Nastavení vlastnosti visible pro jednotlivé prvky
+	# Setting the visible property for individual elements
 	for i in range(num_buttons):
 		var button = %HBoxContainer.get_child(i)
 		button.visible = i in visible_indices
@@ -76,27 +74,27 @@ func set_skill_btn_textures():
 	
 
 func _on_btn_skill_attack_speed_pressed():
-	emit_signal("increaseAttackSpeed", 1.1)
+	emit_signal("increase_attack_speed", 1.1)
 	hide_skills()
 
 
 func _on_btn_skill_attack_damage_pressed():
-	emit_signal("increaseAttackDamage", 2)
+	emit_signal("increase_attack_damage", 1.1)
 	hide_skills()
 
 
 func _on_btn_skill_movement_speed_pressed():
-	emit_signal("increaseMovementSpeed", 1.1)
+	emit_signal("increase_movement_speed", 1.1)
 	hide_skills()
 
 
 func _on_btn_skill_life_steal_pressed():
-	emit_signal("addLifeSteal", 3)
+	emit_signal("add_life_steal", 2)
 	hide_skills()
 
 
 func _on_btn_skill_two_arrows_pressed():
-	emit_signal("addArrow")
+	emit_signal("add_arrow")
 	hide_skills()
 	var button = %btnSkillTwoArrows
 	%HBoxContainer.remove_child(button)
@@ -104,25 +102,25 @@ func _on_btn_skill_two_arrows_pressed():
 
 
 func _on_btn_skill_max_health_pressed():
-	emit_signal("increaseMaxHealth", 50)
+	emit_signal("increase_max_health", 50)
 	hide_skills()
 
 
 func _on_btn_skill_fire_arrows_pressed():
-	emit_signal("setFireArrows")
+	emit_signal("set_fire_arrows")
 	hide_skills()
 
 
 func _on_btn_skill_frozen_arrows_pressed():
-	emit_signal("setFrozenArrows")
+	emit_signal("set_frozen_arrows")
 	hide_skills()
 
 
 func _on_btn_skill_knock_arrows_pressed():
-	emit_signal("setKnockArrows")
+	emit_signal("set_knock_arrows")
 	hide_skills()
 
 
 func _on_btn_skill_damage_resistance_pressed():
-	emit_signal("increaseDamageResistance", 1.1)
+	emit_signal("increase_damage_resistance", 1.1)
 	hide_skills()

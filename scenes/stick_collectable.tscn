@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://baddo8yh7xm33"]
 
-[ext_resource type="Script" path="res://StickCollectable.gd" id="1_c1u2t"]
+[ext_resource type="Script" path="res://script/StickCollectable.gd" id="1_5lsgj"]
 [ext_resource type="Texture2D" uid="uid://c3fdtlietg6hu" path="res://resources/enviroment/stick-icon.png" id="2_fagcr"]
 [ext_resource type="Resource" uid="uid://mm4rydflkk07" path="res://inventory/items/stick.tres" id="2_qp10b"]
 
@@ -8,7 +8,7 @@
 radius = 16.0
 
 [node name="StickCollectable" type="StaticBody2D"]
-script = ExtResource("1_c1u2t")
+script = ExtResource("1_5lsgj")
 item = ExtResource("2_qp10b")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

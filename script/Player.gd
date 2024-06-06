@@ -48,24 +48,24 @@ func _physics_process(delta):
 	$Marker2D.look_at(mouse_pos)
 	
 	if Input.is_action_pressed("left_mouse") and bow_equiped and bow_cooldown:
-		shootArrow()
+		shoot_arrow()
 	
-	detectEnemyDamage(delta)
+	detect_enemy_damage(delta)
 	play_anim(direction)
 	
-func detectEnemyDamage(delta):
+func detect_enemy_damage(delta):
 	var overlapping_mobs = %HurtBox.get_overlapping_bodies()
 	if overlapping_mobs.size() > 0:
 		for mob in overlapping_mobs:
 			if mob.has_method("enemy"):
 				current_health -= (mob.attack_damage/damage_resistance) * delta
 				player_change_health.emit(current_health)
-				takeDamageAnimation()
+				take_damage_animation()
 				if current_health <= 0.0:
 					health_depleted.emit()
 			
 					
-func takeDamageAnimation():
+func take_damage_animation():
 	$AnimatedSprite2D.material.set_shader_parameter("opacity", 0.7);
 	$AnimatedSprite2D.material.set_shader_parameter("r", 1.0);
 	$AnimatedSprite2D.material.set_shader_parameter("g", 0);
@@ -74,12 +74,12 @@ func takeDamageAnimation():
 	$TakeDamageTimer.start()
 	
 
-func resetShader():
+func reset_shader():
 	$AnimatedSprite2D.material.set_shader_parameter("opacity", 1.0);
 	$AnimatedSprite2D.material.set_shader_parameter("mix_color", 0);
 	
 	
-func shootArrow():
+func shoot_arrow():
 	bow_cooldown = false
 	var x_value = 2 if mouse_location.x < 0 else -2
 	var y_value = 2 if mouse_location.y < 0 else -2
@@ -153,7 +153,7 @@ func collect(item):
 	
 
 func _on_take_damage_timer_timeout():
-	resetShader()
+	reset_shader()
 	
 func on_trigger_life_steal():
 	current_health += life_steal

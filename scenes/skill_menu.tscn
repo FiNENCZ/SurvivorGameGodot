@@ -1,7 +1,7 @@
 [gd_scene load_steps=16 format=3 uid="uid://dylgdhhbs5gqn"]
 
-[ext_resource type="Script" path="res://scenes/skill_menu.gd" id="1_1twrq"]
 [ext_resource type="Shader" path="res://skill_menu.gdshader" id="1_3mjah"]
+[ext_resource type="Script" path="res://script/skill_menu.gd" id="1_c7uo5"]
 [ext_resource type="Texture2D" uid="uid://bl5std3mcewwy" path="res://resources/invertory_art/inventory-background.png" id="3_vg4pr"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_wmkwn"]
@@ -101,7 +101,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_1twrq")
+script = ExtResource("1_c7uo5")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_wmkwn")
@@ -163,7 +163,7 @@ layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxTexture_e8gnw")
 theme_override_styles/hover = SubResource("StyleBoxTexture_05h80")
 theme_override_styles/pressed = SubResource("StyleBoxTexture_fgust")
-text = "Life Steal +3 HP"
+text = "Life Steal +2 HP"
 
 [node name="btnSkillTwoArrows" type="Button" parent="PanelContainer/HBoxContainer"]
 unique_name_in_owner = true

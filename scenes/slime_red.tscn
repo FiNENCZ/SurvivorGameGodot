@@ -1,6 +1,6 @@
 [gd_scene load_steps=27 format=3 uid="uid://twjojjsadtq6"]
 
-[ext_resource type="Script" path="res://scenes/slime_red.gd" id="1_3q8kh"]
+[ext_resource type="Script" path="res://script/slime_red.gd" id="1_cl0dx"]
 [ext_resource type="Shader" path="res://scenes/damage_shader.gdshader" id="2_bmn3h"]
 [ext_resource type="Texture2D" uid="uid://b5thy1e416nn0" path="res://resources/character/survivalgame-enemy-slime-red.png" id="3_jrh43"]
 
@@ -166,7 +166,7 @@ radius = 7.0
 radius = 2270.77
 
 [node name="Slime" type="CharacterBody2D"]
-script = ExtResource("1_3q8kh")
+script = ExtResource("1_cl0dx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 material = SubResource("ShaderMaterial_hqjs0")
