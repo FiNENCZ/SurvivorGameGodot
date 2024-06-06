@@ -17,3 +17,10 @@ Každá následující úroveň se stává progresivně náročnější a vyžad
 ### Videodemonstrace:
 https://github.com/FiNENCZ/SurvivorGameGodot/assets/99534053/f5c06a75-af8d-4597-a71a-a44c120bc4bf
 
+### Možná vylepšení
+ - Přidat předměty (zbroj, elixíry, atd.)
+ - Přidat aktivní schopnosti hlavní postavy (nikoli pouze atributové)
+ - Zvýšit variabilitu nepřátel (útok na dálku, schopnosti, lepší AI)
+ - Přidat zvukové efekty
+ - Optimalizovat hru
+
